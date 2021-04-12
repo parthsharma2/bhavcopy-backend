@@ -29,6 +29,9 @@ def fetch_equity_data():
         csv_filename = z.filelist[0].filename
         csv_str = z.read(csv_filename).decode()
 
+        # flush all keys in Redis before adding new keys
+        redis_instance.flushall()
+
         for record in csv.DictReader(io.StringIO(csv_str)):
             key = f'{record["SC_CODE"].strip()}{record["SC_NAME"].strip()}'
             value = {
